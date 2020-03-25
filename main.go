@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "gdocker/test"
 
+func main() {
+	test.LimitMemory()
 }
