@@ -19,7 +19,7 @@ func LimitMemory() {
 		fmt.Printf("current 容器进程 pid %d", syscall.Getpid())
 		fmt.Println()
 
-		cmd := exec.Command("sh", "-c", `stress --vm-bytes 200m --vm-keep -m 1`)
+		cmd := exec.Command("sh", "-c", `stress --vm-bytes 400m --vm-keep -m 1`)
 		cmd.SysProcAttr = &syscall.SysProcAttr{}
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
@@ -57,9 +57,8 @@ func LimitMemory() {
 		//将容器进程加入到这个cgroup中
 		_ = ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "tasks"), []byte(strconv.Itoa(cmd.Process.Pid)), 0644)
 		//限制cgroup进程使用
-		_ = ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "memory.limit_in_bytes"), []byte("lOOm"), 0644)
-
-		_, _ = cmd.Process.Wait()
+		_ = ioutil.WriteFile(path.Join(cgroupMemoryHierarchyMount, "testmemorylimit", "memory.limit_in_bytes"), []byte("100m"), 0644)
 	}
 
+	_, _ = cmd.Process.Wait()
 }
